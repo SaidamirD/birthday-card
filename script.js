@@ -30,11 +30,6 @@ preloadSurpriseImages();
     "255, 120, 0"
   ];
 
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
   function randomCircle() {
     return {
       x:       Math.random() * W,
@@ -49,23 +44,15 @@ preloadSurpriseImages();
     };
   }
 
-function resize() {
-  W = canvas.width  = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-  // Убираем отсюда пересоздание circles!
-}
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
 
-function init() {
-  resize();
-  circles = Array.from({ length: 15 }, randomCircle); // Создаем ТОЛЬКО тут
-}
-
-window.addEventListener("resize", () => {
-  // При изменении размера экрана просто обновляем переменные W и H, 
-  // чтобы круги не вылетали за новые границы, но не пересоздаем их.
-  W = canvas.width  = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-});
+  function init() {
+    resize();
+    circles = Array.from({ length: 15 }, randomCircle); // 15 кругов для оптимизации производительности
+  }
 
   function draw() {
     /* фон */
@@ -84,7 +71,6 @@ window.addEventListener("resize", () => {
 
     /* боке-круги */
     circles.forEach(c => {
-
       c.pulse += c.pulseSpeed;
       const alphaNow = c.alpha + Math.sin(c.pulse) * 0.04;
 
@@ -117,7 +103,8 @@ window.addEventListener("resize", () => {
   }
 
   window.addEventListener("resize", () => {
-    resize();
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
   });
 
   init();
@@ -125,22 +112,41 @@ window.addEventListener("resize", () => {
 })();
 
 /* ==========================
-   START
+   ELEMENTS & GLOBAL SFX
+========================== */
+let sfxPop, sfxHorn, sfxBlow, sfxLighter;
+
+function playSound(audio) {
+  if (!audio) return;
+  audio.currentTime = 0; // Сбрасываем звуковую дорожку в начало
+  audio.play().catch(e => console.log("Audio play error:", e));
+}
+
+/* ==========================
+   START & INTERACTION LOGIC
 ========================== */
 document.addEventListener("DOMContentLoaded", () => {
-
-  const overlay  = document.getElementById("start-overlay");
+  const overlay   = document.getElementById("start-overlay");
   const preloader = document.getElementById("preloader");
 
-  function startExperience() {
-    [sfxPop, sfxHorn, sfxBlow, sfxLighter].forEach(sound => {
-    sound.play().then(() => {
-      sound.pause();
-      sound.currentTime = 0;
-    }).catch(e => console.log("Audio unlock bypass", e));
-  });
+  // Инициализируем звуки строго ПОСЛЕ загрузки DOM структуры HTML
+  sfxPop     = document.getElementById("sfx-pop");
+  sfxHorn    = document.getElementById("sfx-horn");
+  sfxBlow    = document.getElementById("sfx-blow");
+  sfxLighter = document.getElementById("sfx-lighter");
 
-    overlay.style.opacity     = "0";
+  function startExperience() {
+    // Безопасный обход блокировки аудио в мобильных браузерах
+    [sfxPop, sfxHorn, sfxBlow, sfxLighter].forEach(sound => {
+      if (sound) {
+        sound.play().then(() => {
+          sound.pause();
+          sound.currentTime = 0;
+        }).catch(e => console.log("Audio unlock bypass", e));
+      }
+    });
+
+    overlay.style.opacity       = "0";
     overlay.style.pointerEvents = "none";
 
     setTimeout(() => overlay.remove(), 300);
@@ -149,9 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       opacity: 0,
       duration: 0.5,
       onComplete: () => {
-
         preloader.style.display = "none";
-
         setupScene();
         animateIntro();
         startMusic();
@@ -159,28 +163,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  overlay.addEventListener("click", startExperience, { once: true });
+  if (overlay) {
+    overlay.addEventListener("click", startExperience, { once: true });
+  }
 });
-
-/* ==========================
-   ELEMENTS
-========================== */
-
-const sfxPop     = document.getElementById("sfx-pop");
-const sfxHorn    = document.getElementById("sfx-horn");
-const sfxBlow    = document.getElementById("sfx-blow");
-const sfxLighter = document.getElementById("sfx-lighter");
-
-function playSound(audio) {
-  if (!audio) return;
-  audio.currentTime = 0; // Сбрасываем звуковую дорожку в начало
-  audio.play().catch(e => console.log("Аудио заблокировано или не прогрузилось:", e));
-}
-
-function playSound(audio) {
-  audio.currentTime = 0; // Сбрасываем в начало, если звук уже играл
-  audio.play().catch(e => console.log("Audio play error:", e));
-}
 
 const CONFETTI_COLORS = [
   "#ff4d6d", "#ffd93d", "#4ecdc4",
