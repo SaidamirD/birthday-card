@@ -61,19 +61,30 @@ preloadSurpriseImages();
     "255, 120, 0"
   ];
 
-  function randomCircle() {
-    return {
-      x:       Math.random() * W,
-      y:       Math.random() * H,
-      r:       18 + Math.random() * 240,
-      alpha:   0.04 + Math.random() * 0.18,
-      color:   COLORS[Math.floor(Math.random() * COLORS.length)],
-      speedX:  (Math.random() - 0.5) * 0.3,
-      speedY:  (Math.random() - 0.5) * 0.3,
-      pulse:   Math.random() * Math.PI * 2,
-      pulseSpeed: 0.005 + Math.random() * 0.01
-    };
-  }
+function randomCircle() {
+  // Увеличиваем диапазон радиусов: от крошечных (10px) до огромных (310px)
+  // Это создает сильный эффект глубины (какие-то круги кажутся близкими, какие-то далекими)
+  const randomRadius = 30 + Math.random() * 300; 
+
+  // Задаем более контрастный разброс скоростей. 
+  // Маленькие круги будут двигаться чуть быстрее, большие — лениво плыть
+  const speedModifier = randomRadius > 150 ? 0.15 : 0.4;
+
+  return {
+    x:       Math.random() * W,
+    y:       Math.random() * H,
+    r:       randomRadius,
+    // Разброс прозрачности, чтобы они не сливались в одну массу
+    alpha:   0.02 + Math.random() * 0.15,
+    color:   COLORS[Math.floor(Math.random() * COLORS.length)],
+    // Случайное направление движения с учетом модификатора скорости
+    speedX:  (Math.random() - 0.5) * speedModifier,
+    speedY:  (Math.random() - 0.5) * speedModifier,
+    pulse:   Math.random() * Math.PI * 2,
+    // Разброс скорости мерцания (пульсации)
+    pulseSpeed: 0.002 + Math.random() * 0.012
+  };
+}
 
   function resize() {
     W = canvas.width  = window.innerWidth;
