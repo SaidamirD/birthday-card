@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
+
+  <title>С Днём Рождения!</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- GSAP Draggable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+</head>
+
+<body>
+
+  <!-- START OVERLAY -->
+  <div id="start-overlay">
+    <div class="start-card">
+      <div class="start-title">
+        🎉 С Днём Рождения! 🎉
+      </div>
+
+      <div class="start-text">
+        Нажмите, чтобы открыть открытку
+      </div>
+    </div>
+  </div>
+
+  <!-- PRELOADER -->
+  <div id="preloader">
+    <div class="loader-cake">
+      🎂
+    </div>
+  </div>
+
+  <!-- VIDEO BACKGROUND -->
+  <video
+    id="video-bg"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="none"
+  >
+    <source
+      src="assets/videos/background.mp4"
+      type="video/mp4"
+    />
+  </video>
+
+  <!-- OVERLAY -->
+  <div class="bg-overlay"></div>
+
+  <!-- MAIN SCENE -->
+  <main id="scene">
+
+    <!-- FLAGS -->
+    <div
+      id="flags-container"
+      class="hidden"
+    >
+
+      <div
+        class="flag-row"
+        id="row-1"
+      >
+        <div class="flag" data-letter="С">С</div>
+        <div class="flag" data-letter=" "> </div>
+        <div class="flag" data-letter="д">д</div>
+        <div class="flag" data-letter="н">н</div>
+        <div class="flag" data-letter="ё">ё</div>
+        <div class="flag" data-letter="м">м</div>
+      </div>
+
+      <div
+        class="flag-row"
+        id="row-2"
+      >
+        <div class="flag" data-letter="р">р</div>
+        <div class="flag" data-letter="о">о</div>
+        <div class="flag" data-letter="ж">ж</div>
+        <div class="flag" data-letter="д">д</div>
+        <div class="flag" data-letter="е">е</div>
+        <div class="flag" data-letter="н">н</div>
+        <div class="flag" data-letter="и">и</div>
+        <div class="flag" data-letter="я">я</div>
+      </div>
+
+    </div>
+
+    
+                <!-- CONFETTI GAME -->
+            <div
+              id="confetti-container"
+              class="hidden"
+            >
+
+              <!-- LEFT POPPER -->
+<div
+  class="party-popper left"
+  id="left-popper"
+>
+  <img
+    src="assets/icons/popper.svg"
+    alt="Confetti popper"
+  />
+</div>
+
+<div
+  class="party-popper right"
+  id="right-popper"
+>
+  <img
+    src="assets/icons/popper.svg"
+    alt="Confetti popper"
+  />
+</div>
+
+              <!-- PARTICLES -->
+              <div
+                id="confetti-particles"
+              ></div>
+
+            </div>
+
+    <!-- CAKE ZONE -->
+    <section id="cake-zone">
+
+      <!-- CAKE -->
+      <div id="cake">
+
+        <!-- TOP -->
+        <div class="cake-top">
+
+          <!-- CANDLES -->
+          <div id="candles-container"></div>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="cake-body">
+
+          <!-- MIDDLE -->
+          <div class="cake-middle">
+
+          </div>    
+
+  </div>
+
+          <!-- BOTTOM -->
+          <div class="cake-bottom"></div>
+
+        </div>
+
+        <!-- SHADOW -->
+        <div class="cake-shadow"></div>
+
+      </div>
+
+      <!-- GIFT BOX -->
+      <div id="gift-box">
+
+        <div class="gift-lid">
+          <div class="gift-ribbon-lv"></div>
+          
+         
+<div class="gift-bow">
+  <img src="assets/icons/bow.svg" alt="bow" />
+</div>
+
+
+        </div>
+
+        <div class="gift-body">
+          <div class="gift-ribbon-v"></div>
+          <div class="gift-ribbon-h"></div>
+        </div>
+
+        <!-- SURPRISE -->
+        <div id="gift-surprise">
+
+          <img
+            id="surprise-image"
+            src=""
+            alt="Поздравление"
+          />
+
+        </div>
+
+      </div>
+
+    </section>
+    
+    
+                  <!-- HINT -->
+    <div id="hint-sign" class="hidden">
+            <h2>
+          С Днём Рождения!
+          
+        </h2>
+  <span id="hint-text"></span>
+</div>
+
+  </main>
+
+  <!-- MUSIC -->
+  <audio
+    id="background-music"
+    loop
+  >
+    <source
+      src="assets/music/music.mp3"
+      type="audio/mpeg"
+    />
+  </audio>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
