@@ -1,3 +1,17 @@
+// Массив для хранения загруженных в память картинок
+const preloadedImages = [];
+const TOTAL_IMAGES = 8;
+
+function preloadSurpriseImages() {
+  for (let i = 1; i <= TOTAL_IMAGES; i++) {
+    const img = new Image();
+    img.src = `assets/images/${i}.webp`;
+    preloadedImages.push(img); // Картинка скачивается и остается в кэше браузера
+  }
+}
+// Запускаем предзагрузку мгновенно
+preloadSurpriseImages();
+
 /* ==========================
    BOKEH BACKGROUND
 ========================== */
@@ -25,7 +39,7 @@
     return {
       x:       Math.random() * W,
       y:       Math.random() * H,
-      r:       18 + Math.random() * 80,
+      r:       18 + Math.random() * 240,
       alpha:   0.04 + Math.random() * 0.18,
       color:   COLORS[Math.floor(Math.random() * COLORS.length)],
       speedX:  (Math.random() - 0.5) * 0.3,
@@ -43,7 +57,7 @@ function resize() {
 
 function init() {
   resize();
-  circles = Array.from({ length: 35 }, randomCircle); // Создаем ТОЛЬКО тут
+  circles = Array.from({ length: 15 }, randomCircle); // Создаем ТОЛЬКО тут
 }
 
 window.addEventListener("resize", () => {
@@ -152,10 +166,16 @@ document.addEventListener("DOMContentLoaded", () => {
    ELEMENTS
 ========================== */
 
-const sfxPop     = new Audio("assets/sounds/pop.wav");
-const sfxHorn    = new Audio("assets/sounds/horn.wav");
-const sfxBlow    = new Audio("assets/sounds/blow.ogg");
-const sfxLighter = new Audio("assets/sounds/lighter.wav");
+const sfxPop     = document.getElementById("sfx-pop");
+const sfxHorn    = document.getElementById("sfx-horn");
+const sfxBlow    = document.getElementById("sfx-blow");
+const sfxLighter = document.getElementById("sfx-lighter");
+
+function playSound(audio) {
+  if (!audio) return;
+  audio.currentTime = 0; // Сбрасываем звуковую дорожку в начало
+  audio.play().catch(e => console.log("Аудио заблокировано или не прогрузилось:", e));
+}
 
 function playSound(audio) {
   audio.currentTime = 0; // Сбрасываем в начало, если звук уже играл
