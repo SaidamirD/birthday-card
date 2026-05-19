@@ -35,10 +35,23 @@
     };
   }
 
-  function init() {
-    resize();
-    circles = Array.from({ length: 35 }, randomCircle);
-  }
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  // Убираем отсюда пересоздание circles!
+}
+
+function init() {
+  resize();
+  circles = Array.from({ length: 35 }, randomCircle); // Создаем ТОЛЬКО тут
+}
+
+window.addEventListener("resize", () => {
+  // При изменении размера экрана просто обновляем переменные W и H, 
+  // чтобы круги не вылетали за новые границы, но не пересоздаем их.
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+});
 
   function draw() {
     /* фон */
@@ -106,6 +119,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const preloader = document.getElementById("preloader");
 
   function startExperience() {
+    [sfxPop, sfxHorn, sfxBlow, sfxLighter].forEach(sound => {
+    sound.play().then(() => {
+      sound.pause();
+      sound.currentTime = 0;
+    }).catch(e => console.log("Audio unlock bypass", e));
+  });
 
     overlay.style.opacity     = "0";
     overlay.style.pointerEvents = "none";
@@ -139,7 +158,8 @@ const sfxBlow    = new Audio("assets/sounds/blow.ogg");
 const sfxLighter = new Audio("assets/sounds/lighter.wav");
 
 function playSound(audio) {
-  audio.cloneNode().play();
+  audio.currentTime = 0; // Сбрасываем в начало, если звук уже играл
+  audio.play().catch(e => console.log("Audio play error:", e));
 }
 
 const CONFETTI_COLORS = [

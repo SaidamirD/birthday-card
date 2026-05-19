@@ -96,6 +96,8 @@ html, body{
   overflow:hidden;
   font-family: "Trebuchet MS", sans-serif;
   touch-action: manipulation;
+  -webkit-user-select: none;
+       user-select: none;
 }
 
 /* ==========================
