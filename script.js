@@ -115,7 +115,7 @@ preloadSurpriseImages();
       if (c.x < -c.r)  c.x = W + c.r;
       if (c.x > W + c.r) c.x = -c.r;
       if (c.y < -c.r)  c.y = H + c.r;
-      if (c.y > H + с.r) c.y = -c.r;
+      if (c.y > H + c.r) c.y = -c.r;
     });
 
     requestAnimationFrame(draw);
