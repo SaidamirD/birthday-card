@@ -1,4 +1,103 @@
 /* ==========================
+   BOKEH BACKGROUND
+========================== */
+(function () {
+  const canvas = document.getElementById("bokeh-bg");
+  const ctx    = canvas.getContext("2d");
+
+  let W, H, circles;
+
+  const COLORS = [
+    "255, 160, 0",
+    "255, 200, 0",
+    "255, 220, 80",
+    "255, 255, 200",
+    "200, 60, 0",
+    "255, 120, 0"
+  ];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function randomCircle() {
+    return {
+      x:       Math.random() * W,
+      y:       Math.random() * H,
+      r:       18 + Math.random() * 80,
+      alpha:   0.04 + Math.random() * 0.18,
+      color:   COLORS[Math.floor(Math.random() * COLORS.length)],
+      speedX:  (Math.random() - 0.5) * 0.3,
+      speedY:  (Math.random() - 0.5) * 0.3,
+      pulse:   Math.random() * Math.PI * 2,
+      pulseSpeed: 0.005 + Math.random() * 0.01
+    };
+  }
+
+  function init() {
+    resize();
+    circles = Array.from({ length: 35 }, randomCircle);
+  }
+
+  function draw() {
+    /* фон */
+    ctx.fillStyle = "#2a0500";
+    ctx.fillRect(0, 0, W, H);
+
+    /* лёгкий красный виньет */
+    const vignette = ctx.createRadialGradient(
+      W / 2, H / 2, H * 0.1,
+      W / 2, H / 2, H * 0.85
+    );
+    vignette.addColorStop(0, "rgba(80, 10, 0, 0)");
+    vignette.addColorStop(1, "rgba(10, 0, 0, 0.7)");
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, W, H);
+
+    /* боке-круги */
+    circles.forEach(c => {
+
+      c.pulse += c.pulseSpeed;
+      const alphaNow = c.alpha + Math.sin(c.pulse) * 0.04;
+
+      /* мягкий круг через radialGradient */
+      const grad = ctx.createRadialGradient(
+        c.x, c.y, 0,
+        c.x, c.y, c.r
+      );
+      grad.addColorStop(0,   `rgba(${c.color}, ${alphaNow})`);
+      grad.addColorStop(0.5, `rgba(${c.color}, ${alphaNow * 0.4})`);
+      grad.addColorStop(1,   `rgba(${c.color}, 0)`);
+
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      /* движение */
+      c.x += c.speedX;
+      c.y += c.speedY;
+
+      /* wrap по краям */
+      if (c.x < -c.r)  c.x = W + c.r;
+      if (c.x > W + c.r) c.x = -c.r;
+      if (c.y < -c.r)  c.y = H + c.r;
+      if (c.y > H + c.r) c.y = -c.r;
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener("resize", () => {
+    resize();
+  });
+
+  init();
+  draw();
+})();
+
+/* ==========================
    START
 ========================== */
 document.addEventListener("DOMContentLoaded", () => {

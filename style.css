@@ -102,17 +102,12 @@ html, body{
    VIDEO BACKGROUND
 ========================== */
 
-#video-bg{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-
-  filter: blur(12px) brightness(0.45);
-  transform: scale(1.15);
-
-  z-index:-3;
+#bokeh-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
 }
 
 .bg-overlay{
